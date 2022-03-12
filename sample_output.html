@@ -12,8 +12,8 @@
 <style type="text/css">
 
         #mynetwork {
-            width: 3670;
-            height: 1828px;
+            width: 1920;
+            height: 1080px;
             background-color: #ffffff;
             border: 1px solid lightgray;
             position: relative;
@@ -58,8 +58,8 @@
         
 
         // parsing and collecting nodes and edges from the python
-        nodes = new vis.DataSet([{"id": "#adtech", "label": "#adtech", "shape": "dot"}, {"id": "#marketing", "label": "#marketing", "shape": "dot"}, {"id": "#dataengineering", "label": "#dataengineering", "shape": "dot"}, {"id": "#empowerment", "label": "#empowerment", "shape": "dot"}, {"id": "#python", "label": "#python", "shape": "dot"}, {"id": "#datascience", "label": "#datascience", "shape": "dot"}, {"id": "#mobility", "label": "#mobility", "shape": "dot"}, {"id": "#socialmedia", "label": "#socialmedia", "shape": "dot"}]);
-        edges = new vis.DataSet([{"from": "#dataengineering", "to": "#mobility"}, {"from": "#empowerment", "to": "#mobility"}, {"from": "#datascience", "to": "#python"}, {"from": "#dataengineering", "to": "#empowerment"}, {"from": "#marketing", "to": "#adtech"}, {"from": "#datascience", "to": "#adtech"}, {"from": "#dataengineering", "to": "#python"}, {"from": "#datascience", "to": "#dataengineering"}, {"from": "#marketing", "to": "#datascience"}, {"from": "#datascience", "to": "#socialmedia"}]);
+        nodes = new vis.DataSet([{"id": "#linux", "label": "#linux", "shape": "dot"}, {"id": "#startups", "label": "#startups", "shape": "dot"}, {"id": "#datascience", "label": "#datascience", "shape": "dot"}, {"id": "#berlin", "label": "#berlin", "shape": "dot"}, {"id": "#infosec", "label": "#infosec", "shape": "dot"}, {"id": "#cybersecurity", "label": "#cybersecurity", "shape": "dot"}, {"id": "#socialmedia", "label": "#socialmedia", "shape": "dot"}, {"id": "#businessanalytics", "label": "#businessanalytics", "shape": "dot"}]);
+        edges = new vis.DataSet([{"from": "#startups", "to": "#berlin"}, {"from": "#datascience", "to": "#socialmedia"}, {"from": "#infosec", "to": "#linux"}, {"from": "#cybersecurity", "to": "#infosec"}, {"from": "#startups", "to": "#businessanalytics"}, {"from": "#businessanalytics", "to": "#berlin"}]);
 
         // adding nodes and edges to the graph
         data = {nodes: nodes, edges: edges};
