@@ -172,7 +172,7 @@ with col2:
 
         st.button("Like", key="like_edge", on_click=like_edge, args=(liked_edge,))
 
-    st.markdown("### Das sind nicht Druiden, die ihr sucht...")
+    st.markdown("#### Das sind nicht die Druiden, die ihr sucht...")
 
     with st.expander("DANGER ZONE", expanded=False):
 
