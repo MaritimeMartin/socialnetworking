@@ -116,5 +116,5 @@ class DbNode(DB.Entity):
         return [Node(id=n.label, label=n.label, size=(n.value**1.5)*100) for n in cls.all()]
 
 
-DB.bind(provider="sqlite", filename="../db_model.sqlite", create_db=True)
+DB.bind(provider="sqlite", filename="db_model.sqlite", create_db=True)
 DB.generate_mapping(create_tables=True)
