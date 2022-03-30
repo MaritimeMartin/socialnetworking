@@ -1,1 +1,6 @@
-pyvis
+streamlit
+streamlit-agraph
+
+thefuzz
+python-Levenshtein
+pony

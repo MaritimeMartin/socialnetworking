@@ -1,4 +1,3 @@
-from email.policy import default
 from typing import List
 
 from pony import orm
