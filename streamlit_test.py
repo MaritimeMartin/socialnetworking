@@ -134,26 +134,28 @@ with col1:
 with col2:
 
     st.markdown("### Erstelle neue Edges und Nodes.")
-    st.markdown(
+    with st.expander("Erstellen", expanded=False):
+        st.markdown(
+            """
+            Gebt zwei Tags ein.
+            - Wenn es sie noch nicht gibt, werden zwei Nodes und eine Edge zwischen ihnen erstellt.
+            - Wenn es noch keine Edge gibt, dann wird diese erstellt.
+            - Gibt es die Edge oder Node bereits, wird ihr Gewicht erhöht.
         """
-        Gebt zwei Tags ein.
-        - Wenn es sie noch nicht gibt, werden zwei Nodes und eine Edge zwischen ihnen erstellt.
-        - Wenn es noch keine Edge gibt, dann wird diese erstellt.
-        - Gibt es die Edge oder Node bereits, wird ihr Gewicht erhöht.
-    """
-    )
+        )
 
-    hash1 = st.text_input("Erstes Tag:", key="hash1")
-    hash2 = st.text_input("Zweites Tag:", key="hash2")
+        hash1 = st.text_input("Erstes Tag:", key="hash1")
+        hash2 = st.text_input("Zweites Tag:", key="hash2")
 
-    st.button("Erstellen", on_click=commit_hashes, args=(hash1, hash2))
+        st.button("Erstellen", on_click=commit_hashes, args=(hash1, hash2))
 
     st.markdown("### Like eine Node oder Edge")
     st.markdown(
         """
-        
-    """
-    )
+        Like eine Node oder Edge und ihre Wertigkeit wird um eins erhöht.
+
+        """
+        )
     with st.expander("Like Node", expanded=False):
         liked_node = st.selectbox("Select a node:", [n.label for n in DbNode.all()],key="like_node_select")
 
@@ -169,6 +171,8 @@ with col2:
         )
 
         st.button("Like", key="like_edge", on_click=like_edge, args=(liked_edge,))
+
+    st.markdown("### Das sind nicht Druiden, die ihr sucht...")
 
     with st.expander("DANGER ZONE", expanded=False):
 
