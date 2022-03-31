@@ -143,7 +143,7 @@ if __name__ == "__main__":
 
     with col2:
 
-        st.markdown("### Erstelle neue Tags und Connectons.")
+        st.markdown("### Erstelle neue Tags und Connections.")
         with st.expander("Erstellen", expanded=False):
             st.markdown(
                 """
