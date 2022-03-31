@@ -123,7 +123,7 @@ def enter_password(password):
 if __name__ == "__main__":
     GRAPH_CONFIG = Config(
         width=1300,
-        height=800,
+        height=700,
         directed=False,
         nodeHighlightBehavior=True,
         highlightColor="#F7A7A6",  # or "blue"
