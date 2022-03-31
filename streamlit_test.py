@@ -6,7 +6,6 @@ from thefuzz import process
 
 from datamodel import DB, DbEdge, DbNode
 
-# TODO: Download Database
 # TODO: Wording verbessern.
 
 
@@ -121,8 +120,8 @@ def enter_password(password):
 
 if __name__ == "__main__":
     GRAPH_CONFIG = Config(
-        width=1300,
-        height=700,
+        width=1200,
+        height=600,
         directed=False,
         nodeHighlightBehavior=True,
         highlightColor="#F7A7A6",  # or "blue"
@@ -144,14 +143,14 @@ if __name__ == "__main__":
 
     with col2:
 
-        st.markdown("### Erstelle neue Edges und Nodes.")
+        st.markdown("### Erstelle neue Tags und Connectons.")
         with st.expander("Erstellen", expanded=False):
             st.markdown(
                 """
                 Gebt zwei Tags ein.
-                - Wenn es sie noch nicht gibt, werden zwei Nodes und eine Edge zwischen ihnen erstellt.
-                - Wenn es noch keine Edge gibt, dann wird diese erstellt.
-                - Gibt es die Edge oder Node bereits, wird ihr Gewicht erhöht.
+                - Wenn es sie noch nicht gibt, werden zwei Nodes und eine Connections zwischen ihnen erstellt.
+                - Wenn es noch keine Connection gibt, dann wird diese erstellt.
+                - Gibt es die Connection oder Tags bereits, wird ihr Gewicht erhöht.
             """
             )
 
@@ -160,16 +159,16 @@ if __name__ == "__main__":
 
             st.button("Erstellen", on_click=commit_hashes, args=(hash1, hash2))
 
-        st.markdown("### Like eine Node oder Edge")
+        st.markdown("### Like eine Connection oder ein Tag")
         st.markdown(
             """
-            Like eine Node oder Edge und ihre Wertigkeit wird um eins erhöht.
+            Like eine Connection oder ein Tag und ihre Wertigkeit wird um eins erhöht.
 
             """
         )
         with st.expander("Like Node", expanded=False):
             liked_node = st.selectbox(
-                "Select a node:",
+                "Tag auswählen:",
                 [n.label for n in DbNode.all()],
                 key="like_node_select",
             )
@@ -181,7 +180,7 @@ if __name__ == "__main__":
         with st.expander("Like Edge", expanded=False):
 
             liked_edge = st.selectbox(
-                "Select an edge:",
+                "Connection auswählen:",
                 [f"{e.source.label}|{e.target.label}" for e in DbEdge.all()],
                 key="like_edge_select",
             )
