@@ -115,6 +115,11 @@ def like_edge(selected_item):
     DbEdge.create(source, target)
 
 
+def enter_password(password):
+    if password == st.secrets["ADMIN_PASS"]:
+        st.session_state["is_admin"] = True
+
+
 if __name__ == "__main__":
     GRAPH_CONFIG = Config(
         width=1300,
@@ -187,7 +192,7 @@ if __name__ == "__main__":
         if st.session_state.get("is_admin", False):
 
             st.markdown("### Das sind nicht die Druiden, die ihr sucht...")
-            
+
             with st.expander("DANGER ZONE", expanded=False):
 
                 st.error("Nichts anfassen, das ist nur für mich!")
@@ -197,17 +202,23 @@ if __name__ == "__main__":
                 st.markdown("---")
 
                 st.write("Delete Nodes here")
-                node_label = st.selectbox("Select a node:", [n.label for n in DbNode.all()])
+                node_label = st.selectbox(
+                    "Select a node:", [n.label for n in DbNode.all()]
+                )
 
                 st.button(
-                    "Delete", key="delete_node", on_click=DbNode.delete, args=(node_label,)
+                    "Delete",
+                    key="delete_node",
+                    on_click=DbNode.delete,
+                    args=(node_label,),
                 )
                 st.markdown("---")
 
                 st.write("Delete Edges here")
                 edges = DbEdge.all()
                 edge_label = st.selectbox(
-                    "Select a edge:", [f"{e.source.label}|{e.target.label}" for e in edges]
+                    "Select a edge:",
+                    [f"{e.source.label}|{e.target.label}" for e in edges],
                 )
                 st.button(
                     "Delete",
@@ -225,7 +236,8 @@ if __name__ == "__main__":
                 )
 
         else:
-            password = st.text_input("Enter the Matrix", type="password")
+            password = st.text_input("Enter the Matrix:", type="password")
 
-            if password == st.secrets["ADMIN_PASS"]:
-                st.session_state["is_admin"] = True
+            st.button(
+                "Enter", key="enter_admin", on_click=enter_password, args=(password,)
+            )
