@@ -6,17 +6,9 @@ from thefuzz import process
 
 from datamodel import DB, DbEdge, DbNode
 
-GRAPH_CONFIG = Config(
-    width=1300,
-    height=800,
-    directed=False,
-    nodeHighlightBehavior=True,
-    highlightColor="#F7A7A6",  # or "blue"
-    collapsible=True,
-    node={"labelProperty": "label"},
-    link={"labelProperty": "label", "renderLabel": True}
-    # **kwargs e.g. node_size=1000 or node_color="blue"
-)
+# TODO: Cheat for Admin
+# TODO: Download Database
+# TODO: Wording verbessern.
 
 
 def fuzzy_clean(s: str):
@@ -123,89 +115,117 @@ def like_edge(selected_item):
     DbEdge.create(source, target)
 
 
-st.set_page_config(page_title="DBU Topic Graph", layout="wide")
-col1, col2 = st.columns([3, 1])
-
-with col1:
-    agraph(
-        nodes=DbNode.all_to_graph(), edges=DbEdge.all_to_graph(), config=GRAPH_CONFIG
+if __name__ == "__main__":
+    GRAPH_CONFIG = Config(
+        width=1300,
+        height=800,
+        directed=False,
+        nodeHighlightBehavior=True,
+        highlightColor="#F7A7A6",  # or "blue"
+        collapsible=True,
+        node={"labelProperty": "label"},
+        link={"labelProperty": "label", "renderLabel": True}
+        # **kwargs e.g. node_size=1000 or node_color="blue"
     )
 
-with col2:
+    st.set_page_config(page_title="DBU Topic Graph", layout="wide")
+    col1, col2 = st.columns([3, 1])
 
-    st.markdown("### Erstelle neue Edges und Nodes.")
-    with st.expander("Erstellen", expanded=False):
+    with col1:
+        agraph(
+            nodes=DbNode.all_to_graph(),
+            edges=DbEdge.all_to_graph(),
+            config=GRAPH_CONFIG,
+        )
+
+    with col2:
+
+        st.markdown("### Erstelle neue Edges und Nodes.")
+        with st.expander("Erstellen", expanded=False):
+            st.markdown(
+                """
+                Gebt zwei Tags ein.
+                - Wenn es sie noch nicht gibt, werden zwei Nodes und eine Edge zwischen ihnen erstellt.
+                - Wenn es noch keine Edge gibt, dann wird diese erstellt.
+                - Gibt es die Edge oder Node bereits, wird ihr Gewicht erhöht.
+            """
+            )
+
+            hash1 = st.text_input("Erstes Tag:", key="hash1")
+            hash2 = st.text_input("Zweites Tag:", key="hash2")
+
+            st.button("Erstellen", on_click=commit_hashes, args=(hash1, hash2))
+
+        st.markdown("### Like eine Node oder Edge")
         st.markdown(
             """
-            Gebt zwei Tags ein.
-            - Wenn es sie noch nicht gibt, werden zwei Nodes und eine Edge zwischen ihnen erstellt.
-            - Wenn es noch keine Edge gibt, dann wird diese erstellt.
-            - Gibt es die Edge oder Node bereits, wird ihr Gewicht erhöht.
-        """
+            Like eine Node oder Edge und ihre Wertigkeit wird um eins erhöht.
+
+            """
         )
+        with st.expander("Like Node", expanded=False):
+            liked_node = st.selectbox(
+                "Select a node:",
+                [n.label for n in DbNode.all()],
+                key="like_node_select",
+            )
 
-        hash1 = st.text_input("Erstes Tag:", key="hash1")
-        hash2 = st.text_input("Zweites Tag:", key="hash2")
+            st.button(
+                "Like", key="like_node", on_click=DbNode.create, args=(liked_node,)
+            )
 
-        st.button("Erstellen", on_click=commit_hashes, args=(hash1, hash2))
+        with st.expander("Like Edge", expanded=False):
 
-    st.markdown("### Like eine Node oder Edge")
-    st.markdown(
-        """
-        Like eine Node oder Edge und ihre Wertigkeit wird um eins erhöht.
+            liked_edge = st.selectbox(
+                "Select an edge:",
+                [f"{e.source.label}|{e.target.label}" for e in DbEdge.all()],
+                key="like_edge_select",
+            )
 
-        """
-        )
-    with st.expander("Like Node", expanded=False):
-        liked_node = st.selectbox("Select a node:", [n.label for n in DbNode.all()],key="like_node_select")
+            st.button("Like", key="like_edge", on_click=like_edge, args=(liked_edge,))
 
-        st.button("Like", key="like_node", on_click=DbNode.create, args=(liked_node,))
+        if st.session_state.get("is_admin", False):
 
-    with st.expander("Like Edge", expanded=False):
-
-        liked_edge = st.selectbox(
-            "Select an edge:",
+            st.markdown("### Das sind nicht die Druiden, die ihr sucht...")
             
-            [f"{e.source.label}|{e.target.label}" for e in DbEdge.all()],
-            key = "like_edge_select"
-        )
+            with st.expander("DANGER ZONE", expanded=False):
 
-        st.button("Like", key="like_edge", on_click=like_edge, args=(liked_edge,))
+                st.error("Nichts anfassen, das ist nur für mich!")
 
-    st.markdown("#### Das sind nicht die Druiden, die ihr sucht...")
+                st.button("Test Data", on_click=create_test_data)
 
-    with st.expander("DANGER ZONE", expanded=False):
+                st.markdown("---")
 
-        st.error("Nichts anfassen, das ist nur für mich!")
+                st.write("Delete Nodes here")
+                node_label = st.selectbox("Select a node:", [n.label for n in DbNode.all()])
 
-        st.button("Test Data", on_click=create_test_data)
+                st.button(
+                    "Delete", key="delete_node", on_click=DbNode.delete, args=(node_label,)
+                )
+                st.markdown("---")
 
-        st.markdown("---")
+                st.write("Delete Edges here")
+                edges = DbEdge.all()
+                edge_label = st.selectbox(
+                    "Select a edge:", [f"{e.source.label}|{e.target.label}" for e in edges]
+                )
+                st.button(
+                    "Delete",
+                    key="delete_edge",
+                    on_click=delete_edge,
+                    args=(edge_label,),
+                )
+                st.markdown("---")
 
-        st.write("Delete Nodes here")
-        node_label = st.selectbox("Select a node:", [n.label for n in DbNode.all()])
+                st.write("Clean all nodes and edges.")
+                st.button(
+                    "Clean All",
+                    key="clean_all",
+                    on_click=DbNode.delete_all,
+                )
 
-        st.button(
-            "Delete", key="delete_node", on_click=DbNode.delete, args=(node_label,)
-        )
-        st.markdown("---")
+        else:
+            password = st.text_input("Enter the Matrix", type="password")
 
-        st.write("Delete Edges here")
-        edges = DbEdge.all()
-        edge_label = st.selectbox(
-            "Select a edge:", [f"{e.source.label}|{e.target.label}" for e in edges]
-        )
-        st.button(
-            "Delete",
-            key="delete_edge",
-            on_click=delete_edge,
-            args=(edge_label,),
-        )
-        st.markdown("---")
-
-        st.write("Clean all nodes and edges.")
-        st.button(
-            "Clean All",
-            key="clean_all",
-            on_click=DbNode.delete_all,
-        )
+            if password == st.secrets["ADMIN_PASS"]:
+                st.session_state["is_admin"] = True
