@@ -6,7 +6,9 @@ from thefuzz import process
 
 from datamodel import DB, DbEdge, DbNode
 
-# TODO: Wording verbessern.
+# TODO: Topic Container?
+#   Mehrere Nodes zu einer Topic zusammenfügen. Wer die Node supported supported to Topic,
+#   Wird als ein Punkt dargestellt.
 
 
 def fuzzy_clean(s: str):
@@ -118,7 +120,26 @@ def enter_password(password):
         st.session_state["is_admin"] = True
 
 
+def test_click():
+    st.info("WORKS")
+
+
 if __name__ == "__main__":
+    FONT_SIZE = 20
+
+    if len(DbNode.all()) > 10:
+        FONT_SIZE = 12
+
+    NODE_CONFIG = {
+        "labelProperty": "label",
+        "fontSize": FONT_SIZE,
+        "highlightFontSize": FONT_SIZE,
+        "highlightFontWeight": "bold",
+        "fontWeight": "bold",
+        "labelPosition": "center",
+        "opacity": 0.7
+    }
+
     GRAPH_CONFIG = Config(
         width=1200,
         height=600,
@@ -126,8 +147,8 @@ if __name__ == "__main__":
         nodeHighlightBehavior=True,
         highlightColor="#F7A7A6",  # or "blue"
         collapsible=True,
-        node={"labelProperty": "label"},
-        link={"labelProperty": "label", "renderLabel": True}
+        node=NODE_CONFIG,
+        link={"labelProperty": "label", "renderLabel": True},
         # **kwargs e.g. node_size=1000 or node_color="blue"
     )
 
@@ -142,6 +163,7 @@ if __name__ == "__main__":
         )
 
     with col2:
+        st.button("Refresh")
 
         st.markdown("### Erstelle neue Tags und Connections.")
         with st.expander("Erstellen", expanded=False):
