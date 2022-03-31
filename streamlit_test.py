@@ -261,7 +261,7 @@ if __name__ == "__main__":
                     st.download_button("Download", file, file_name="db_model.sqlite")
 
         else:
-            password = st.text_input("Enter the Matrix:", type="password")
+            password = st.text_input("Admin Functions:", type="password")
 
             st.button(
                 "Enter", key="enter_admin", on_click=enter_password, args=(password,)
