@@ -6,7 +6,6 @@ from thefuzz import process
 
 from datamodel import DB, DbEdge, DbNode
 
-# TODO: Cheat for Admin
 # TODO: Download Database
 # TODO: Wording verbessern.
 
@@ -234,6 +233,11 @@ if __name__ == "__main__":
                     key="clean_all",
                     on_click=DbNode.delete_all,
                 )
+
+                st.markdown("---")
+                st.write("Download Data")
+                with open("db_model.sqlite", "rb") as file:
+                    st.download_button("Download", file, file_name="db_model.sqlite")
 
         else:
             password = st.text_input("Enter the Matrix:", type="password")
